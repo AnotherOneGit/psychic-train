@@ -7,7 +7,13 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
 </head>
-<body style="background: #2d3748">
-a
+<body>
+
+{{$response}}
+
+@foreach($response as $resp)
+    {{$resp->id}}
+@endforeach
+
 </body>
 </html>

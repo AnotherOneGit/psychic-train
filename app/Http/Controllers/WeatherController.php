@@ -8,6 +8,7 @@ use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
 
 class WeatherController extends Controller
@@ -17,24 +18,47 @@ class WeatherController extends Controller
      *
      * @param Request $request
      * @return Application|Factory|View|\Illuminate\Http\Client\Response
-     * @throws \JsonException
      */
     public function index(Request $request)
     {
-        $url = 'http://api.weatherapi.com/v1/history.json?key=156fe4fdc4df412e98d84129200111&q=Moscow&dt='.Carbon::today().'&lang=ru&';
+
+        $url = 'http://api.weatherapi.com/v1/history.json?key=156fe4fdc4df412e98d84129200111&q=Moscow&dt=' . Carbon::today() . '&lang=ru&';
 
         if ($request->has('date')) {
-            $url = 'http://api.weatherapi.com/v1/history.json?key=156fe4fdc4df412e98d84129200111&q=Moscow&dt='.$request->date.'&lang=ru&';
+            $url = 'http://api.weatherapi.com/v1/history.json?key=156fe4fdc4df412e98d84129200111&q=Moscow&dt=' . $request->date . '&lang=ru&';
         }
 
-        $response = json_decode(collect(Http::get($url)->json()), true, 512, JSON_THROW_ON_ERROR);
-        dump($response);
-        $maxwind_kph = $response['forecast']['forecastday'][0]['day']['maxwind_kph'];
-        $name = $response['location']['name'];
-        $date = $response['forecast']['forecastday'][0]['date'];
-        $condition = $response['forecast']['forecastday'][0]['day']['condition'];
-        $avgtemp_c = $response['forecast']['forecastday'][0]['day']['avgtemp_c'];
-        return view('weather', compact('response', 'avgtemp_c', 'condition', 'date', 'name', 'maxwind_kph'));
+        $response =
+            Cache::rememberForever('response',  function () use ($url) {
+            return
+                json_decode(collect(Http::get($url)->json()), true, 512, JSON_THROW_ON_ERROR);
+        });
+
+        $name =
+            Cache::rememberForever('name', function () use ($response) {
+            return
+                $response['location']['name'];
+        });
+
+        $condition =
+            Cache::rememberForever('condition', function () use ($response) {
+            return
+                $response['forecast']['forecastday'][0]['day']['condition'];
+        });
+
+        $maxwind_kph = Cache::rememberForever('maxwind_kph', function () use ($response) {
+            return $response['forecast']['forecastday'][0]['day']['maxwind_kph'];
+        });
+
+        $date = Cache::rememberForever('date', function () use ($response) {
+        return $response['forecast']['forecastday'][0]['date'];
+    });
+
+        $avgtemp_c = Cache::rememberForever('$avgtemp_c', function () use ($response) {
+            return $response['forecast']['forecastday'][0]['day']['avgtemp_c'];
+        });
+
+        return view('weather', compact('response','avgtemp_c', 'condition', 'date', 'maxwind_kph', 'name'));
     }
 
     /**
@@ -50,7 +74,7 @@ class WeatherController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param \Illuminate\Http\Request $request
+     * @param Request $request
      * @return Response
      */
     public function store(Request $request)
@@ -83,7 +107,7 @@ class WeatherController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param \Illuminate\Http\Request $request
+     * @param Request $request
      * @param int $id
      * @return Response
      */

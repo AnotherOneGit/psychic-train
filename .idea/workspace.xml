@@ -2,11 +2,11 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="3bd474c3-58cd-44fa-8d4d-9ff63415aa2c" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/test.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/test.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/Http/Controllers/WeatherController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/WeatherController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/config/database.php" beforeDir="false" afterPath="$PROJECT_DIR$/config/database.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/resources/views/weather.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/weather.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/routes/web.php" beforeDir="false" afterPath="$PROJECT_DIR$/routes/web.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -184,7 +184,9 @@
       <workItem from="1604232210114" duration="606000" />
       <workItem from="1604297357382" duration="435000" />
       <workItem from="1604297803568" duration="131000" />
-      <workItem from="1604297947311" duration="6447000" />
+      <workItem from="1604297947311" duration="7844000" />
+      <workItem from="1604306432349" duration="3568000" />
+      <workItem from="1604311029001" duration="5032000" />
     </task>
     <task id="LOCAL-00001" summary="init commit">
       <created>1604207879303</created>
@@ -193,7 +195,14 @@
       <option name="project" value="LOCAL" />
       <updated>1604207879303</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="add values and date select in weather">
+      <created>1604304864512</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1604304864512</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -213,6 +222,7 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="init commit" />
-    <option name="LAST_COMMIT_MESSAGE" value="init commit" />
+    <MESSAGE value="add values and date select in weather" />
+    <option name="LAST_COMMIT_MESSAGE" value="add values and date select in weather" />
   </component>
 </project>

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
@@ -14,13 +15,26 @@ class WeatherController extends Controller
     /**
      * Display a listing of the resource.
      *
+     * @param Request $request
      * @return Application|Factory|View|\Illuminate\Http\Client\Response
+     * @throws \JsonException
      */
-    public function index()
+    public function index(Request $request)
     {
-        $response = json_decode(collect(Http::get('http://api.weatherapi.com/v1/search.json?key=156fe4fdc4df412e98d84129200111&q=London')->json()));
-        return $response;
-        return view('weather', compact('response'));
+        $url = 'http://api.weatherapi.com/v1/history.json?key=156fe4fdc4df412e98d84129200111&q=Moscow&dt='.Carbon::today().'&lang=ru&';
+
+        if ($request->has('date')) {
+            $url = 'http://api.weatherapi.com/v1/history.json?key=156fe4fdc4df412e98d84129200111&q=Moscow&dt='.$request->date.'&lang=ru&';
+        }
+
+        $response = json_decode(collect(Http::get($url)->json()), true, 512, JSON_THROW_ON_ERROR);
+        dump($response);
+        $maxwind_kph = $response['forecast']['forecastday'][0]['day']['maxwind_kph'];
+        $name = $response['location']['name'];
+        $date = $response['forecast']['forecastday'][0]['date'];
+        $condition = $response['forecast']['forecastday'][0]['day']['condition'];
+        $avgtemp_c = $response['forecast']['forecastday'][0]['day']['avgtemp_c'];
+        return view('weather', compact('response', 'avgtemp_c', 'condition', 'date', 'name', 'maxwind_kph'));
     }
 
     /**
